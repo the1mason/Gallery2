@@ -62,7 +62,7 @@ public class MainActivity : AvaloniaMainActivity<App>
 
     public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
     {
-#pragma warning disable CA1416
+#pragma warning disable CA1416sta
         base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 #pragma warning restore CA1416
 
