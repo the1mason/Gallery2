@@ -14,10 +14,26 @@ sealed class Program
         .StartWithClassicDesktopLifetime(args);
 
     // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp()
+    private static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .UseReactiveUI()
-            .LogToTrace();
+            .LogToTrace()
+            .AfterSetup(OnAfterSetupCallback); 
+    
+    private static void OnAfterSetupCallback(AppBuilder builder)
+    {
+        if (builder.Instance is not App app)
+            throw new InvalidOperationException();
+
+        if (OperatingSystem.IsWindows())
+            app.ConfigurationContext.Services.AddWindowsServices();
+        
+        else if (OperatingSystem.IsMacOS())
+            app.ConfigurationContext.Services.AddMacOsServices();
+        
+        else if (OperatingSystem.IsLinux())
+            app.ConfigurationContext.Services.AddLinuxServices();
+    }
 }

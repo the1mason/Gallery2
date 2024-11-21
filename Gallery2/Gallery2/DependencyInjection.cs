@@ -1,19 +1,20 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Gallery2.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Gallery2;
 
 public static class DependencyInjection
 {
-    public static void AddGallery2Common(this IServiceCollection services)
+    public static void AddCommonServices(this IServiceCollection services)
     {
-        services.AddSingleton<ViewLocator>();
+        services.AddTransient<MainViewModel>();
     }
     
-    public static void AddAndroid(this IServiceCollection services)
+    public static void AddSingleViewServices(this IServiceCollection services)
     {
     }
     
-    public static void AddDesktop(this IServiceCollection services)
+    public static void AddDesktopServices(this IServiceCollection services)
     {
     }
 }

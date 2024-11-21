@@ -1,4 +1,5 @@
-﻿using _Microsoft.Android.Resource.Designer;
+﻿using System;
+using _Microsoft.Android.Resource.Designer;
 using Android;
 using Android.App;
 using Android.Content.PM;
@@ -26,7 +27,16 @@ public class MainActivity : AvaloniaMainActivity<App>
     {
         return base.CustomizeAppBuilder(builder)
             .WithInterFont()
-            .UseReactiveUI();
+            .UseReactiveUI()
+            .AfterSetup(OnAfterSetupCallback);
+    }
+
+    private void OnAfterSetupCallback(AppBuilder builder)
+    {
+        if (builder.Instance is not App app)
+            throw new InvalidOperationException(); 
+        
+        app.ConfigurationContext.Services.AddAndroidServices();
     }
 
     private const int RequestStorageId = 0;
@@ -38,7 +48,7 @@ public class MainActivity : AvaloniaMainActivity<App>
         Window!.DecorView.SetBackgroundColor(new Color(ContextCompat.GetColor(this, ResourceConstant.Color.camera_isle_color)));
     }
 
-    void RequestPermissions()
+    private void RequestPermissions()
     {
         if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.ReadExternalStorage) != Permission.Granted ||
             ContextCompat.CheckSelfPermission(this, Manifest.Permission.WriteExternalStorage) != Permission.Granted)
@@ -52,7 +62,9 @@ public class MainActivity : AvaloniaMainActivity<App>
 
     public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
     {
+#pragma warning disable CA1416
         base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+#pragma warning restore CA1416
 
         if (requestCode == RequestStorageId)
         {
